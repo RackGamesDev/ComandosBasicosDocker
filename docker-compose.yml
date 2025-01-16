@@ -1,6 +1,5 @@
 #Un docker-compose.yml es un "script" para crear varios contenedores preconfigurados de una sola vez mediante otras imagenes y dockerfiles
 
-version: "3.9" #La version de docker compose
 services: #Se entiende por servicio cada contenedor que docker compose creara
     unservicio: #Creara un contenedor llamado asi
         build: #Se crea a partir de un Dockerfile
@@ -18,11 +17,28 @@ services: #Se entiende por servicio cada contenedor que docker compose creara
         volumes: #Los volumenes que usara (solo se pueden seleccionar los creados en este archivo)
             - caja-comun:/datos #El nombre del volumen y donde se montara en el contenedor
             - ./contenido:/masdatos #En este caso la carpeta del host "contenido" sera la misma que la montada en "masdatos" en el contenedor
+        restart: always #Quiere decir que se reiniciara cuando falle
+        deploy:
+            resources: #Estableciendo las capacidades de hardware
+                limits:
+                    cpus: "1"
+                    memory: "512M"
+        networks: #Especificando a que red se va a conectar
+            - nuevared
     otroservicio: #Esto creara otro contenedor
-        image: mariadb
+        image: nginx
+#        depends_on: #Provocando que requiera otro contenedor, en este caso es el anterior
+#            - unservicio
         ports:
             - "4000:4000"
-        environment:
-            MARIADB_ROOT_PASSWORD: 12345678
+        labels: #Se pueden hacer labels (para la info) automaticamente (se suele hacer desde el Dockerfile)
+            com.ejemplo.descripcion: "Descripcion varia"
+        command: ["nginx", "-g", "daemon off;"] #En caso de que una imagen tenga un comando inicial por defecto se puede sobreescribir
+        networks:
+            - nuevared
 volumes: #Creacion automatica de volumenes
     caja-comun:
+    otra-caja:
+networks: #Creancion automatica de redes
+    nuevared:
+
