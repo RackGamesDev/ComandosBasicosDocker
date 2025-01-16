@@ -1,0 +1,245 @@
+Mas informacion en https://docs.docker.com/reference/cli/docker/   https://docs.docker.com/engine/
+
+
+
+
+IMAGEN = archivo del cual se puede crear un contenedor
+
+docker search parametros
+    docker search nginx
+    Busca en dockerhub como si fuese la pagina, se pueden aplicar filtros
+
+docker pull imagen:version
+	docker pull nginx
+	Descargar imagen de dockerhub
+
+docker images (docker image ls)
+	Listar imagenes guardadas
+
+docker rmi IMG
+	Eliminar una imagen (usando su id o su nombre:version)
+
+docker commit CNT nuevaIMG
+    docker commit contenedor nuevaimagen
+    Crea una imagen nueva a partir de un contenedor
+
+docker run opciones -d IMG
+    docker run --name contenedor -d imagen
+    Igual que docker create pero lo inicia automaticamente, el -d es para que no acapare la consola
+
+docker history IMG
+    Muestra la historia (forks, modificaciones, etc) de una imagen
+
+docker inspect IMG
+    Muestra un json con la informacion detallada de la imagen
+
+docker export CNT -o x.tar
+    docker export contenedor -o contenedor.tar
+    Exporta los archivos del contenedor a un archivo comprimido tarball
+
+docker import x.tar nuevaIMG
+    docker import contenedornuevo.tar contenedornuevo
+    Importa un archivo tar para crear una imagen a partir de sus archivos
+
+docker tag IMG tag
+    docker tag 9c4a621709bd alguien/contenedor:version2.0
+    Poner una tag a una imagen, necesario para publicar un fork de una imagen ya existente
+
+docker push tag/IMG
+    Sube una imagen al repositorio previamente configurado
+
+
+
+
+
+
+
+
+
+
+
+CONTENEDOR = maquina virtual de docker para ejecutar una tarea concreta
+
+docker stats CNT
+	Acapara la consola para dar metricas de rendimiento del contenedor
+
+docker container top CNT
+    Muestra la informacion del proceso en el host de un contenedor encendido
+
+docker ps -a
+	Lista de todos los contenedores
+
+docker ps (docker container ls)
+	Lista de todos los contenedores encendidos
+
+docker create opciones IMG
+    docker create --name contenedor -p 3000:80 -p 4000:443 -e ENTORNO=hola -e OTROENTORNO=3 --hostname servidor --label tipocontenedor imagen
+    Crea un contenedor a partir de una imagen, en este caso con el nombre "contenedor", el puerto 3000 del host asociado al 80 del contenedor y esa variable de entorno (aunque con -env se puede usar un archivo .env)
+    Este comando tiene muchas mas opciones para crear contenedores bien configurados
+
+docker run opciones IMG
+    Igual que docker create pero lo abre automaticamente
+
+docker start CNT
+	Enciende un contenedor ya creado mediante su nombre o id, si se usa la opcion -a al final acapara la consola para mostrar sus logs
+
+docker restart CNT
+	Reinicia un contenedor pausado o encendido
+
+docker stop CNT
+	Apaga controladamente un contenedor mediante su nombre o id
+    
+docker kill CNT
+	Cierra bruscamente el proceso de un contenedor mediante su nombre o id
+
+docker pause CNT
+	Pausa un contenedor encendido mediante su nombre o id, se puede reanudar con: docker unpause CNT
+
+docker wait CNT
+    Pausa un contenedor para que automaticamente se reanude cuando otro se pare o se apague
+
+docker port CNT
+	Da la informacion de los puertos de un contenedor en comparacion al host
+
+docker logs -n x CNT
+	docker logs -n 3 contenedor
+	Muestra los ultimos x logs de un contenedor en ejecucion
+
+docker logs -f CNT
+	docker logs -f contenedor
+	Acapara la consola para mostrar los logs en tiemop real
+
+docker exec -it CNT /bin/comando
+	docker exec -it contenedor /bin/bash
+	Ejecuta un comando que venga instalado en un contenedor en ejecucion
+
+docker rm CNT (docker container rm CNT)
+    Elimina un contenedor
+
+docker diff CNT
+    Muestra las diferencias del contenedor respecto a la imagen original
+
+docker inspect CNT
+    Muestra un json con la informacion detallada de ese contenedor
+
+docker container prune
+    Elimina todos los contenedores que no esten encendidos
+
+docker container rename CNT nuevoCNT
+    docker container rename contenedor elcontenedor
+    Renombra un contenedor
+
+docker update opciones CNT
+    docker update --kernel-memory 64M contenedor
+    Es capaz de actualizar ciertos paramteros de un contenedor, se recomienda que este apagado
+    Si los parametros no se pueden modificar con docker update sera necesario crear una copia de dicho contenedor con las nuevas opciones
+
+
+
+
+
+
+
+VOLUMEN = unidad de almacenamiento virtual accesible por distintos contenedores
+
+docker volume ls
+    Lista de todos los volumenes
+
+docker volume prune
+    Elimina todos los volumenes y su contenido que no se esten usando
+
+docker volume create VLM
+    docker volume create caja
+    Crea un volumen listo para ser usado por contenedores
+    docker create --name nombre -v volumen:/ruta imagen
+    docker create --name nombre -v /rutahost:/rutacontenedor imagen
+    Se pueden tambien especificar opciones como el driver que se usara o el tipo de unidad
+
+docker inspect VLM
+    Muestra un json con la informacion del volumen
+
+docker volume rm VLM
+    Elimina un volumen y todo su contenido (los contenedores que lo usen no pueden estar encendidos)
+
+
+
+
+
+
+
+NETWORK = espacio virtual que funciona como una LAN a la que los contenedores pueden conectarse para interactuar entre ellos
+
+docker network ls
+    Lista de las redes de docker, por defecto ya vienen tres
+
+docker network create --attachable RED
+    Crea una red de docker
+    
+docker network inspect RED
+    Muestra un json con los detalles de la red
+
+docker network rm RED
+    Elimina una red de docker
+
+docker network prune
+    Elimina todas las redes de docker sin usar
+
+docker network connect RED CNT
+    Conecta un contenedor a una red, para desconectarlo: docker network disconnect RED CNT
+    docker run --name contenedor --network red imagen
+
+
+
+
+
+BUILD (crear imagenes y contenedores a partir de "scripts" llamados Dockerfile)
+
+docker build -t imagen:tag carpeta
+    docker build -t imagen:1.0 .
+    Escoger una carpeta que obligatoriamente tiene que tener un Dockerfile para crear una imagen a partir de este
+
+docker compose up
+    Busca los "Dockerfile" y el "docker-compose-yml" en ese sitio para crear todos los contenedores
+    docker compose -f docker-compose-otro.yml up (usar otro archivo)
+
+docker compose down
+    Busca los "Dockerfile" y el "docker-compose-yml" en ese sitio para revertir lo hecho con docker compose up (eliminar contenedores y redes)
+
+
+
+
+
+
+
+docker info (docker system info)
+    Da informacion del sistema relevante con docker
+
+docker system df
+    Da informacion sobre el espacio restante y gastado por docker
+
+docker system prune
+    Elimina todos los recursos (imagenes, contenedores, etc) que no se esten usando
+
+docker stats
+    Ofrece datos de rendimiento sobre los contenedores ejecutandose
+
+
+
+
+compose build checkpoint context node plugin scout secret service stack swarm trust config scan
+docker login
+docker logout
+
+
+
+
+
+
+
+
+
+
+
+
+
+

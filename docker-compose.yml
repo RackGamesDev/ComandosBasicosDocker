@@ -1,0 +1,28 @@
+#Un docker-compose.yml es un "script" para crear varios contenedores preconfigurados de una sola vez mediante otras imagenes y dockerfiles
+
+version: "3.9" #La version de docker compose
+services: #Se entiende por servicio cada contenedor que docker compose creara
+    unservicio: #Creara un contenedor llamado asi
+        build: #Se crea a partir de un Dockerfile
+            context: .
+            dockerfile: Dockerfile
+        ports: #Configuracion host:contenedor de los puertos
+            - "80:3000"
+            - "3000:3001"
+        links: #A que otros contenedores de este yml esta pensado conectarse mediante una red de docker (que se crea automaticamente)
+            - otroservicio
+        environment: #Variables de entorno
+            - VARIABLE=hola
+        env_file: #Poner automaticamente las variables de entorno desde un archivo
+            - variables.env
+        volumes: #Los volumenes que usara (solo se pueden seleccionar los creados en este archivo)
+            - caja-comun:/datos #El nombre del volumen y donde se montara en el contenedor
+            - ./contenido:/masdatos #En este caso la carpeta del host "contenido" sera la misma que la montada en "masdatos" en el contenedor
+    otroservicio: #Esto creara otro contenedor
+        image: mariadb
+        ports:
+            - "4000:4000"
+        environment:
+            MARIADB_ROOT_PASSWORD: 12345678
+volumes: #Creacion automatica de volumenes
+    caja-comun:
