@@ -1,5 +1,35 @@
 Mas informacion en https://docs.docker.com/reference/cli/docker/   https://docs.docker.com/engine/
 
+docker info (docker system info)
+    Da informacion del sistema relevante con docker
+
+docker system df
+    Da informacion sobre el espacio restante y gastado por docker
+
+docker system prune
+    Elimina todos los recursos (imagenes, contenedores, etc) que no se esten usando
+
+docker stats
+    Ofrece datos de rendimiento sobre los contenedores ejecutandose
+
+docker config configuracion
+    Se usa para configurar docker
+
+docker login servidor
+    Hacer login remoto a un servidor corriendo docker (se necesita usuario y contrasegna), para salir docker logout
+
+docker plugin x
+    Viene con distintas opciones para gestionar plugins de docker
+
+docker version
+    Ver la version de los sistemas de docker (docker-cli docker-desktop docker-engine etc)
+
+
+
+
+
+
+
 
 
 
@@ -210,26 +240,42 @@ docker compose down
 
 
 
+CONTEXT = cambiar de contexto es para organizarse mejor a la hora de conectarse a distintos servidores de docker
+Cambiar de context no hara que cambien ni las imagenes ni los contenedores ni en general nada almacenado localmente
 
-docker info (docker system info)
-    Da informacion del sistema relevante con docker
+docker context ls
+    Muestra los contextos
 
-docker system df
-    Da informacion sobre el espacio restante y gastado por docker
+docker context create CXT
+    Crear un contexto
 
-docker system prune
-    Elimina todos los recursos (imagenes, contenedores, etc) que no se esten usando
+docker context rm CXT
+    Eliminar un contexto (no hay que eliminar el default)
 
-docker stats
-    Ofrece datos de rendimiento sobre los contenedores ejecutandose
+docker context show
+    Muestra el contexto actual
+
+docker context use CXT
+    Moverse a un contexto para usarlo
+
+docker context inspect CXT
+    Muestra un json con la informacion de ese contexto
+
+docker context export CXT archivo
+    docker context export contexto archivoexportado
+    Exporta un contexto a un archivo para importarlo luego
+
+docker context inport archivo
+    Crea un contexto en base a otro exportado a un archivo
 
 
 
 
-compose build checkpoint context node plugin scout secret service stack swarm trust config scan
-docker login
-docker logout
 
+
+
+swarm
+    node secret service stack
 
 
 
