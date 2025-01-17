@@ -27,12 +27,6 @@ docker version
 
 
 
-
-
-
-
-
-
 IMAGEN = archivo del cual se puede crear un contenedor
 
 docker search parametros
@@ -77,13 +71,6 @@ docker tag IMG tag
 
 docker push tag/IMG
     Sube una imagen al repositorio previamente configurado
-
-
-
-
-
-
-
 
 
 
@@ -167,9 +154,6 @@ docker update opciones CNT
 
 
 
-
-
-
 VOLUMEN = unidad de almacenamiento virtual accesible por distintos contenedores
 
 docker volume ls
@@ -190,9 +174,6 @@ docker inspect VLM
 
 docker volume rm VLM
     Elimina un volumen y todo su contenido (los contenedores que lo usen no pueden estar encendidos)
-
-
-
 
 
 
@@ -221,7 +202,6 @@ docker network connect RED CNT
 
 
 
-
 BUILD (crear imagenes y contenedores a partir de "scripts" llamados Dockerfile)
 
 docker build -t imagen:tag carpeta
@@ -234,8 +214,6 @@ docker compose up
 
 docker compose down
     Busca los "Dockerfile" y el "docker-compose-yml" en ese sitio para revertir lo hecho con docker compose up (eliminar contenedores y redes)
-
-
 
 
 
@@ -267,25 +245,3 @@ docker context export CXT archivo
 
 docker context inport archivo
     Crea un contexto en base a otro exportado a un archivo
-
-
-
-
-
-
-
-swarm
-    node secret service stack
-
-
-
-
-
-
-
-
-
-
-
-
-
